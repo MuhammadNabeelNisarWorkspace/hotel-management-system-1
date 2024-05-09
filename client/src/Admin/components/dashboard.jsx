@@ -19,6 +19,7 @@ const Dashboard = () => {
     { name: "Jane", age: 25 },
     // Add more data rows as needed
   ];
+
   return (
     <div className="flex flex-col justify-center items-center ">
       <div className="w-full  bg-blue-700 text-center ">

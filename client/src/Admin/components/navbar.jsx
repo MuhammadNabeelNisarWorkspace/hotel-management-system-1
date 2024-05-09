@@ -17,7 +17,7 @@ const Navbar = () => {
         </div>
         <div className="navlinks h-auto list-none overflow-y-auto mt-4  p-4 ">
           <ul className="flex flex-col gap-6 ">
-            <Link to={"/admin"}>
+            <Link to={"/"}>
               <li
                 className={` w-100 p-3 rounded-md border-gray-400 border-b-2 flex ${
                   active === "dashboard" ? "bg-slate-200" : ""
