@@ -77,7 +77,7 @@ const Navbar = () => {
                 Rooms
               </li>
             </Link>
-            <Link to={"staff"}>
+            {/* <Link to={"staff"}>
               <li
                 className={` w-100 p-3 rounded-md border-gray-400 border-b-2 flex ${
                   active === "staff" ? "bg-slate-200" : ""
@@ -91,7 +91,7 @@ const Navbar = () => {
                 </span>
                 Staff
               </li>
-            </Link>
+            </Link> */}
             <Link to={"booking"}>
               <li
                 className={` w-100 p-3 rounded-md border-gray-400 border-b-2 flex ${

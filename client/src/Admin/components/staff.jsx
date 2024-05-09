@@ -3,9 +3,48 @@ import DataTable from "./datatable";
 import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import BookingCreateForm from "./bookingCreateForm";
+import ConfirmationModal from "./confirmationModal";
 
 const Staff = () => {
   const [staffs, setStaffs] = useState([]);
+
+  const [deleteItemId, setDeleteItemId] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+
+  const toggleCreateModal = () => {
+    setIsCreateModalOpen(!isCreateModalOpen);
+  };
+
+  const toggleEditModal = (item) => {
+    setSelectedItem(item);
+    setIsEditModalOpen(!isEditModalOpen);
+  };
+
+  const toggleConfirmationModal = (userId) => {
+    setIsConfirmationModalOpen(!isConfirmationModalOpen);
+    setDeleteItemId(userId);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await fetch(
+        `http://localhost:5000/api/admin/rooms/delete/${deleteItemId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      // Refresh guest list after deletion
+      getAllData();
+    } catch (error) {
+      console.log(error);
+    }
+    setIsConfirmationModalOpen(false);
+  };
+
   const getAllData = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/admin/staffs", {
@@ -82,14 +121,54 @@ const Staff = () => {
         </div>
         <div></div>
         <div className="bg-slate-100 p-12 rounded-xl mt-10 w-5/6 ">
-          <Link to="create">
-            <button className="p-2 bg-blue-600 text-white rounded-md float-end trnasition-effect hover:scale-105 hover:bg-blue-500">
-              Create New
-            </button>
-          </Link>
+          <button
+            onClick={toggleCreateModal}
+            className="p-2 bg-blue-600 text-white rounded-md float-end trnasition-effect hover:scale-105 hover:bg-blue-500"
+          >
+            Create New
+          </button>
           <DataTable columns={columns} data={staffs} />
         </div>
       </div>
+
+      {/* Create User Modal */}
+      {isCreateModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+          <div className="bg-slate-100 p-8 rounded-xl modal-pop-up">
+            <h2 className="text-2xl font-bold mb-8 text-center">Create New</h2>
+            <BookingCreateForm getAllData={getAllData} />
+            <button
+              onClick={toggleCreateModal}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md mr-2 border border-blue-900 hover:bg-blue-800 transition-effect hover:scale-105"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Edit User Modal */}
+      {isEditModalOpen && selectedItem && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+          <div className="bg-slate-100 p-8 rounded-xl modal-pop-up">
+            <h2 className="text-2xl font-bold mb-8 text-center">Edit Guest</h2>
+            {/* <UserEditForm userId={selectedItem._id} /> */}
+            <button
+              onClick={() => toggleEditModal(null)}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md mr-2 border border-blue-900 hover:bg-blue-800 transition-effect hover:scale-105"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        onCancel={() => toggleConfirmationModal(null)}
+        onConfirm={handleDelete}
+      />
     </>
   );
 };

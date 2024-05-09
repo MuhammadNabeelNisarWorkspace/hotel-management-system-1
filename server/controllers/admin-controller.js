@@ -57,7 +57,7 @@ const branchById = async (req, res) => {
     const data = await Branch.findOne({ _id: id });
     return res.status(200).json(data);
   } catch (error) {
-     res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -74,7 +74,7 @@ const branchUpdate = async (req, res) => {
     );
     return res.status(200).json(UpdatedBranch);
   } catch (error) {
-     res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -85,7 +85,7 @@ const branchDelete = async (req, res) => {
     await Branch.deleteOne({ _id: id });
     return res.status(200).json({ msg: "Branch Deleted Successfully!" });
   } catch (error) {
-     res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -97,7 +97,7 @@ const guests = async (req, res) => {
   try {
     const guests = await User.find({ role: "guest" });
     res.status(200).json({
-      guests
+      guests,
     });
   } catch (error) {
     console.log(error);
@@ -189,7 +189,7 @@ const userById = async (req, res) => {
     const data = await User.findOne({ _id: id });
     return res.status(200).json(data);
   } catch (error) {
-     res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -206,7 +206,7 @@ const userUpdate = async (req, res) => {
     );
     return res.status(200).json(UpdatedGuest);
   } catch (error) {
-     res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -217,7 +217,7 @@ const userDelete = async (req, res) => {
     await User.deleteOne({ _id: id });
     return res.status(200).json({ msg: "User Deleted Successfully!" });
   } catch (error) {
-     res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -268,7 +268,7 @@ const roomById = async (req, res) => {
     const data = await Room.findOne({ _id: id });
     return res.status(200).json(data);
   } catch (error) {
-     res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -285,7 +285,7 @@ const roomUpdate = async (req, res) => {
     );
     return res.status(200).json(UpdatedRoom);
   } catch (error) {
-     res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -296,167 +296,165 @@ const roomDelete = async (req, res) => {
     await Room.deleteOne({ _id: id });
     return res.status(200).json({ msg: "Room Deleted Successfully!" });
   } catch (error) {
-     res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
-
 
 // ---------------------------------------------------------------------
 // --------------------------Booking Control-------------------------------
 // ---------------------------------------------------------------------
 // Fetch All
 const bookings = async (req, res) => {
-    try {
-      const bookings = await Booking.find();
-      res.status(200).json({
-        mgs: "Bookings Fetched Successfully!",
-        bookings,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const bookingCreate = async (req, res) => {
-    try {
-        const { roomPrice, foodPrice, laundryPrice, roomId, userId, branchId } = req.body;
+  try {
+    const bookings = await Booking.find();
+    res.status(200).json({
+      mgs: "Bookings Fetched Successfully!",
+      bookings,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+const bookingCreate = async (req, res) => {
+  try {
+    const { roomPrice, foodPrice, laundryPrice, roomId, userId, branchId } =
+      req.body;
 
-        // Calculate total amount
-        const totalAmount = roomPrice + (foodPrice || 0) + (laundryPrice || 0);
+    // Calculate total amount
+    const totalAmmount = roomPrice + (foodPrice || 0) + (laundryPrice || 0);
 
-        const booking = await Booking.create({
-            roomId,
-            userId,
-            branchId,
-            roomPrice,
-            foodPrice,
-            laundryPrice,
-            totalAmount, // Update totalAmount field
-        });
+    const booking = await Booking.create({
+      roomId,
+      userId,
+      branchId,
+      roomPrice,
+      foodPrice,
+      laundryPrice,
+      totalAmmount, // Update totalAmmount field
+    });
 
-        res.status(201).json({
-            msg: "Booking created successfully!",
-            booking: booking,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: "Internal Server Error!" });
-    }
+    res.status(201).json({
+      msg: "Booking created successfully!",
+      booking: booking,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Internal Server Error!" });
+  }
 };
 
-  
-  // Fetch Booking By ID
-  const bookingById = async (req, res) => {
-    try {
-      const id = req.params.id;
-      const data = await Booking.findOne({ _id: id });
-      return res.status(200).json(data);
-    } catch (error) {
-       res.status(500).json({ msg: "Internal Server Error" });
-    }
-  };
-  
-  // Update Booking By ID
-  const bookingUpdate = async (req, res) => {
-    try {
-      const id = req.params.id;
-      const updateBookingData = req.body;
-      const UpdatedBooking = await Booking.updateOne(
-        { _id: id },
-        {
-          $set: updateBookingData,
-        }
-      );
-      return res.status(200).json(UpdatedBooking);
-    } catch (error) {
-       res.status(500).json({ msg: "Internal Server Error" });
-    }
-  };
-  
-  // Delete Booking By ID
-  const bookingDelete = async (req, res) => {
-    try {
-      const id = req.params.id;
-      await Booking.deleteOne({ _id: id });
-      return res.status(200).json({ msg: "Booking Deleted Successfully!" });
-    } catch (error) {
-       res.status(500).json({ msg: "Internal Server Error" });
-    }
-  };
+// Fetch Booking By ID
+const bookingById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await Booking.findOne({ _id: id });
+    return res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+};
+
+// Update Booking By ID
+const bookingUpdate = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updateBookingData = req.body;
+    const UpdatedBooking = await Booking.updateOne(
+      { _id: id },
+      {
+        $set: updateBookingData,
+      }
+    );
+    return res.status(200).json(UpdatedBooking);
+  } catch (error) {
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+};
+
+// Delete Booking By ID
+const bookingDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await Booking.deleteOne({ _id: id });
+    return res.status(200).json({ msg: "Booking Deleted Successfully!" });
+  } catch (error) {
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+};
 // ---------------------------------------------------------------------
 // --------------------------Duty Control-------------------------------
 // ---------------------------------------------------------------------
 // Fetch All
 const duties = async (req, res) => {
-    try {
-      const duties = await Duty.find();
-      res.status(200).json({
-        mgs: "Duties Fetched Successfully!",
-        duties,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
- // Create
+  try {
+    const duties = await Duty.find();
+    res.status(200).json({
+      mgs: "Duties Fetched Successfully!",
+      duties,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+// Create
 const dutyCreate = async (req, res) => {
-    try {
-      const { staffId, roomId, task } = req.body;
-  
-      const duty = await Duty.create({
-        staffId,
-        roomId,
-        task,
-      });
-  
-      res.status(201).json({
-        msg: "Duty created successfully!",
-        duty: duty,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ msg: "Internal Server Error!" });
-    }
-  };
-  
-  
-  // Fetch Duty By ID
-  const dutyById = async (req, res) => {
-    try {
-      const id = req.params.id;
-      const data = await Duty.findOne({ _id: id });
-      return res.status(200).json(data);
-    } catch (error) {
-       res.status(500).json({ msg: "Internal Server Error" });
-    }
-  };
-  
-  // Update Duty By ID
-  const dutyUpdate = async (req, res) => {
-    try {
-      const id = req.params.id;
-      const updateDutyData = req.body;
-      const UpdatedDuty = await Duty.updateOne(
-        { _id: id },
-        {
-          $set: updateDutyData,
-        }
-      );
-      return res.status(200).json(UpdatedDuty);
-    } catch (error) {
-       res.status(500).json({ msg: "Internal Server Error" });
-    }
-  };
-  
-  // Delete Duty By ID
-  const dutyDelete = async (req, res) => {
-    try {
-      const id = req.params.id;
-      await Duty.deleteOne({ _id: id });
-      return res.status(200).json({ msg: "Booking Deleted Successfully!" });
-    } catch (error) {
-       res.status(500).json({ msg: "Internal Server Error" });
-    }
-  };
+  try {
+    const { staffId, roomId, task } = req.body;
+
+    const duty = await Duty.create({
+      staffId,
+      roomId,
+      task,
+    });
+
+    res.status(201).json({
+      msg: "Duty created successfully!",
+      duty: duty,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Internal Server Error!" });
+  }
+};
+
+// Fetch Duty By ID
+const dutyById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await Duty.findOne({ _id: id });
+    return res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+};
+
+// Update Duty By ID
+const dutyUpdate = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updateDutyData = req.body;
+    const UpdatedDuty = await Duty.updateOne(
+      { _id: id },
+      {
+        $set: updateDutyData,
+      }
+    );
+    return res.status(200).json(UpdatedDuty);
+  } catch (error) {
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+};
+
+// Delete Duty By ID
+const dutyDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await Duty.deleteOne({ _id: id });
+    return res.status(200).json({ msg: "Booking Deleted Successfully!" });
+  } catch (error) {
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+};
 
 module.exports = {
   home,
