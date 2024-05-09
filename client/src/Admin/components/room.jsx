@@ -1,12 +1,11 @@
+import ConfirmationModal from "./confirmationModal";
 import React, { useEffect, useState } from "react";
-import DataTable from "./datatable";
+import RoomCreateForm from "./roomCreateForm";
+import UserEditForm from "./userEditForm";
+import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-
-import ConfirmationModal from "./confirmationModal";
-import UserCreateForm from "./userCreateForm";
-import UserEditForm from "./userEditForm";
+import DataTable from "./datatable";
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
@@ -73,20 +72,24 @@ const Rooms = () => {
       accessor: "count",
     },
     {
-      Header: "Username",
-      accessor: "username",
+      Header: "branchId",
+      accessor: "branchId",
     },
     {
-      Header: "Email",
-      accessor: "email",
+      Header: "person",
+      accessor: "person",
     },
     {
-      Header: "Phone",
-      accessor: "phoneNumber",
+      Header: "price",
+      accessor: "price",
     },
     {
-      Header: "Password",
-      accessor: "password",
+      Header: "status",
+      accessor: "status",
+    },
+    {
+      Header: "type",
+      accessor: "type",
     },
     {
       Header: "Edit",
@@ -139,7 +142,7 @@ const Rooms = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
           <div className="bg-slate-100 p-8 rounded-xl modal-pop-up">
             <h2 className="text-2xl font-bold mb-8 text-center">Create New</h2>
-            <UserCreateForm getAllData={getAllData} />
+            <RoomCreateForm getAllData={getAllData} />
             <button
               onClick={toggleCreateModal}
               className="px-6 py-2 bg-blue-600 text-white rounded-md mr-2 border border-blue-900 hover:bg-blue-800 transition-effect hover:scale-105"
