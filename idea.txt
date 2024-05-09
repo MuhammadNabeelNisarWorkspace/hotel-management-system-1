@@ -1,0 +1,31 @@
+Users:
+Name
+Email
+Password
+Phone Number
+Role
+	[Staff (Hosekeeping,Receptionist,Manager)
+	Guests
+	Admin]
+
+
+
+Hotel Locations:
+location
+city
+
+
+Room:
+Type
+Person
+Availability
+Status
+Price
+KeyCard
+
+Booking:
+GuestID
+RoomID
+Additional Services
+Total Price
+
